@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tic Tac Toe</title>
+	<style type="text/css">
+		.main-container {
+			display: flex; 
+			flex-direction: column;
+			text-align: center;
+		}
+		.row-container {
+			display: flex;
+			margin: 0 auto;
+		}
+		.square {
+			padding: 1em;
+			border: 1px solid;
+		}
+	</style>
+</head>
+<body>
+	<div class="main-container">
+		<div class="row-container row-1">
+			<div class="square square-1">1</div>
+			<div class="square square-2">2</div>
+			<div class="square square-3">3</div>
+		</div>
+		<div class="row-container row-2">
+			<div class="square square-4">4</div>
+			<div class="square square-5">5</div>
+			<div class="square square-6">6</div>
+		</div>
+		<div class="row-container row-3">
+			<div class="square square-7">7</div>
+			<div class="square square-8">8</div>
+			<div class="square square-9">9</div>
+		</div>
+	</div>
+<script type="text/javascript">
+
+var item = document.getElementsByClassName("square");
+var counter = 0
+for (var i=0; i<item.length; i++) {
+	item[i].onclick = function() {
+		incrementNum(this)		
+	}
+}
+function incrementNum(element) {
+
+	if(element.textContent == "O" || element.textContent == "X") {
+		return;
+	} else {
+		counter += 1;
+		(counter % 2 == 0 ? element.textContent='O' : element.textContent='X');
+	}
+	checkBoard();
+}
+function checkBoard() {
+	rowNum = 3;
+	colNum = 3;
+
+	for(var i = 1 ; i <= rowNum; i++) {
+		var items = document.querySelectorAll(".row-" + i + " .square");
+		
+		if(items[0].textContent && items[1].textContent && items[2].textContent == 'X') {
+		console.log('win')
+		}
+	}
+	// for(var i = 1 ; i <= colNum; i++) {
+		var items1 = document.getElementsByClassName("row-container");
+		console.log(items1[0])		
+
+		// if(items1[0].textContent && items1[1].textContent && items1[2].textContent == 'X') {
+
+		// }
+	// }
+}
+// 	const keys = Array.from(document.querySelectorAll('.key'));
+// keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+// window.addEventListener('keydown', playSound);
+// window.onclick = function(e) {
+//   if (!e.target.localName == 'a' || 'kbd' || 'span') return 
+//     else {
+//       clickFunction();
+//     }
+//   }
+
+</script>
+</body>
+</html>
