@@ -3,20 +3,20 @@
 <head>
 	<title>Tic Tac Toe</title>
 	<style type="text/css">
-		.main-container {
-			display: flex; 
-			flex-direction: column;
-			text-align: center;
-		}
-		.row-container {
-			display: flex;
-			margin: 0 auto;
-		}
-		.square {
-			padding: 1em;
-			border: 1px solid;
-		}
-	</style>
+	.main-container {
+		display: flex; 
+		flex-direction: column;
+		text-align: center;
+	}
+	.row-container {
+		display: flex;
+		margin: 0 auto;
+	}
+	.square {
+		padding: 1em;
+		border: 1px solid;
+	}
+</style>
 </head>
 <body>
 	<div class="main-container">
@@ -36,54 +36,103 @@
 			<div class="square square-9">9</div>
 		</div>
 	</div>
-<script type="text/javascript">
+	<script type="text/javascript">
 
-var item = document.getElementsByClassName("square");
-var counter = 0
-for (var i=0; i<item.length; i++) {
-	item[i].onclick = function() {
-		incrementNum(this)		
-	}
-}
-function incrementNum(element) {
+		var item = document.getElementsByClassName("square");
+		var counter = 0;
+		var player1 = [];
+		var player2 = [];
+		var winningCombo = [];
+		var currentPlayer = player1;
 
-	if(element.textContent == "O" || element.textContent == "X") {
-		return;
-	} else {
-		counter += 1;
-		(counter % 2 == 0 ? element.textContent='O' : element.textContent='X');
-	}
-	checkBoard();
-}
-function checkBoard() {
-	rowNum = 3;
-	colNum = 3;
+		(function loadWinningCombo() {
+			winningCombo.push([1, 2, 3]);
+			winningCombo.push([4, 5, 6]);
+			winningCombo.push([7, 8, 9]);
+			winningCombo.push([1, 4, 7]);
+			winningCombo.push([2, 5, 8]);
+			winningCombo.push([3, 6, 9]);
+			winningCombo.push([1, 5, 9]);
+			winningCombo.push([3, 5, 7]);
+		})();
 
-	for(var i = 1 ; i <= rowNum; i++) {
-		var items = document.querySelectorAll(".row-" + i + " .square");
-		
-		if(items[0].textContent && items[1].textContent && items[2].textContent == 'X') {
-		console.log('win')
+		for (var i=0; i<item.length; i++) {
+			item[i].onclick = function() {
+				incrementNum(this)		
+			}
 		}
-	}
-	// for(var i = 1 ; i <= colNum; i++) {
-		var items1 = document.getElementsByClassName("row-container");
-		console.log(items1[0])		
+		function incrementNum(element) {
 
-		// if(items1[0].textContent && items1[1].textContent && items1[2].textContent == 'X') {
+			if(element.textContent == "O" || element.textContent == "X") {
+				return;
+			} else {
 
-		// }
-	// }
-}
-// 	const keys = Array.from(document.querySelectorAll('.key'));
-// keys.forEach(key => key.addEventListener('transitionend', removeTransition));
-// window.addEventListener('keydown', playSound);
-// window.onclick = function(e) {
-//   if (!e.target.localName == 'a' || 'kbd' || 'span') return 
-//     else {
-//       clickFunction();
-//     }
-//   }
+				counter += 1;
+
+				if(currentPlayer == player1) {
+					player1.push(parseInt(element.textContent));
+					player1.sort(function(a, b) { return a - b });
+					element.textContent = 'X';
+				} else {
+					player2.push(parseInt(element.textContent));
+					player2.sort(function(a, b) {return a - b});
+					element.textContent = 'O';
+				}
+				var weHaveAWinner = checkBoard();
+
+				if(weHaveAWinner) {
+					console.log(currentPlayer.name + ' is the winner')
+				}
+				checkBoard();
+				if(currentPlayer == player1) {
+					currentPlayer = player2;
+				} else {
+					currentPlayer = player1;
+				}
+			}
+			if (counter == 9) {
+				console.log('Game over')
+			}
+		}
+		function checkBoard() {
+			var win = false;
+			var selectedSquare = new Array();
+
+			if (currentPlayer == player1) {
+				selectedSquare = player1;
+			} else {
+				selectedSquare = player2;
+			}
+			if (selectedSquare.length >= 3) {
+
+				for (i = 0 ; i < winningCombo.length; i++) {
+					var winningSets = winningCombo[i];
+					var setFound = true;
+
+					for (r = 0; r < winningSets.length; r++) {
+						var found = false;
+
+						for (s = 0; s < selectedSquare.length; s++) {
+
+							if (winningSets[r] == selectedSquare[s]) {
+
+								found = true;
+								break;
+							}
+						}
+						if (found == false ) {
+							setFound = false;
+							break;
+						}
+					}
+					if (setFound == true) {
+						win = true;
+						break;
+					}
+				}
+			}
+			return win;
+		}
 
 </script>
 </body>
