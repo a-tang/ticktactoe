@@ -13,27 +13,60 @@
 		margin: 0 auto;
 	}
 	.square {
-		padding: 1em;
-		border: 1px solid;
+	    border: 12px solid crimson;
+	    border-radius: 3em;
+    height: 7em;
+    width: 7em;
+    margin: 1em;
+	}
+	.x-mark {
+	    background-color: #FA6900;
+	    position: relative;
+	}
+	.x-mark:after {
+	    position: absolute;
+	    top: 0;
+	    bottom: 0;
+	    left: 0;
+	    right: 0;
+	    font-size: 10em; 
+	    color: #FFF;
+	    line-height: 100px;
+	    text-align: center;		
+	}
+	.o-mark {
+	    background-color: #FA6900;
+	    position: relative;
+	}
+	.o-mark:after {
+	    position: absolute;
+	    top: 0;
+	    bottom: 0;
+	    left: 0;
+	    right: 0;
+	    font-size: 20em; 
+	    color: #FFF;
+	    line-height: 100px;
+	    text-align: center;		
 	}
 </style>
 </head>
 <body>
 	<div class="main-container">
 		<div class="row-container row-1">
-			<div class="square square-1">1</div>
-			<div class="square square-2">2</div>
-			<div class="square square-3">3</div>
+			<div class="square square-1" data-value="1"></div>
+			<div class="square square-2" data-value="2"></div>
+			<div class="square square-3" data-value="3"></div>
 		</div>
 		<div class="row-container row-2">
-			<div class="square square-4">4</div>
-			<div class="square square-5">5</div>
-			<div class="square square-6">6</div>
+			<div class="square square-4" data-value="4"></div>
+			<div class="square square-5" data-value="5"></div>
+			<div class="square square-6" data-value="6"></div>
 		</div>
 		<div class="row-container row-3">
-			<div class="square square-7">7</div>
-			<div class="square square-8">8</div>
-			<div class="square square-9">9</div>
+			<div class="square square-7" data-value="7"></div>
+			<div class="square square-8" data-value="8"></div>
+			<div class="square square-9" data-value="9"></div>
 		</div>
 	</div>
 	<script type="text/javascript">
@@ -64,22 +97,23 @@
 				}
 			}
 		}
+
 		function incrementNum(element) {
 
-			if(element.textContent == "O" || element.textContent == "X") {
+			if(element.classList.contains('o-mark') || element.classList.contains('x-mark')) {
 				return;
 			} else {
 
 				counter += 1;
 
 				if(currentPlayerResult == player1) {
-					player1.push(parseInt(element.textContent));
+					player1.push(parseInt(element.getAttribute('data-value')));
 					player1.sort(function(a, b) { return a - b });
-					element.textContent = 'X';
+					element.classList.add('x-mark');
 				} else {
-					player2.push(parseInt(element.textContent));
+					player2.push(parseInt(element.getAttribute('data-value')));
 					player2.sort(function(a, b) {return a - b});
-					element.textContent = 'O';
+					element.classList.add('o-mark');
 				}
 				let weHaveAWinner = checkBoard();
 
@@ -98,6 +132,7 @@
 				console.log('Game over')
 			}
 		}
+
 		function checkBoard() {
 			let win = false;
 			let selectedSquare = new Array();
@@ -107,6 +142,7 @@
 			} else {
 				selectedSquare = player2;
 			}
+			
 			if (selectedSquare.length >= 3) {
 
 				for (i = 0 ; i < winningCombo.length; i++) {
@@ -138,6 +174,7 @@
 			return win;
 			
 		}
+
 		function endGame() {
 			console.log('ended')
 			for (var i=0; i<item.length; i++) {
