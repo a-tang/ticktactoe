@@ -43,7 +43,7 @@
 		var player1 = [];
 		var player2 = [];
 		var winningCombo = [];
-		var currentPlayer = player1;
+		var currentPlayerResult = player1;
 
 		(function loadWinningCombo() {
 			winningCombo.push([1, 2, 3]);
@@ -54,11 +54,14 @@
 			winningCombo.push([3, 6, 9]);
 			winningCombo.push([1, 5, 9]);
 			winningCombo.push([3, 5, 7]);
+			bindEvent();
 		})();
 
-		for (var i=0; i<item.length; i++) {
-			item[i].onclick = function() {
-				incrementNum(this)		
+		function bindEvent() {
+			for (var i=0; i<item.length; i++) {
+				item[i].onclick = function() {
+					incrementNum(this)		
+				}
 			}
 		}
 		function incrementNum(element) {
@@ -69,7 +72,7 @@
 
 				counter += 1;
 
-				if(currentPlayer == player1) {
+				if(currentPlayerResult == player1) {
 					player1.push(parseInt(element.textContent));
 					player1.sort(function(a, b) { return a - b });
 					element.textContent = 'X';
@@ -78,16 +81,17 @@
 					player2.sort(function(a, b) {return a - b});
 					element.textContent = 'O';
 				}
-				var weHaveAWinner = checkBoard();
+				let weHaveAWinner = checkBoard();
 
 				if(weHaveAWinner) {
-					console.log(currentPlayer.name + ' is the winner')
+					console.log(currentPlayerResult.name + ' is the winner');
+					endGame();
 				}
 				checkBoard();
-				if(currentPlayer == player1) {
-					currentPlayer = player2;
+				if(currentPlayerResult == player1) {
+					currentPlayerResult = player2;
 				} else {
-					currentPlayer = player1;
+					currentPlayerResult = player1;
 				}
 			}
 			if (counter == 9) {
@@ -95,10 +99,10 @@
 			}
 		}
 		function checkBoard() {
-			var win = false;
-			var selectedSquare = new Array();
+			let win = false;
+			let selectedSquare = new Array();
 
-			if (currentPlayer == player1) {
+			if (currentPlayerResult == player1) {
 				selectedSquare = player1;
 			} else {
 				selectedSquare = player2;
@@ -106,11 +110,11 @@
 			if (selectedSquare.length >= 3) {
 
 				for (i = 0 ; i < winningCombo.length; i++) {
-					var winningSets = winningCombo[i];
-					var setFound = true;
+					let winningSets = winningCombo[i];
+					let setFound = true;
 
 					for (r = 0; r < winningSets.length; r++) {
-						var found = false;
+						let found = false;
 
 						for (s = 0; s < selectedSquare.length; s++) {
 
@@ -132,6 +136,13 @@
 				}
 			}
 			return win;
+			
+		}
+		function endGame() {
+			console.log('ended')
+			for (var i=0; i<item.length; i++) {
+				item[i].onclick = ''
+			}
 		}
 
 </script>
