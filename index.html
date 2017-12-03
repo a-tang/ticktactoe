@@ -37,28 +37,15 @@
 
 	}
 	.game-on-state {
-		border: 4px solid #0ff;
-		text-shadow:
-		0 0 5px #fff,
-		0 0 10px #fff,
-		0 0 20px #fff,
-		0 0 40px #0ff,
-		0 0 80px #0ff,
-		0 0 90px #0ff,
-		0 0 100px #0ff,
-		0 0 150px #0ff;
+		border: 4px solid #150d0d;
 	}
-	.game-over-state {
+	.player1-win-state {
+		border: 4px solid #426DFB;
+		text-shadow: 0 0 3vw #2356FF;	
+	}
+	.player2-win-state {
 		border: 4px solid #FB4264;
-		text-shadow:
-		0 0 5px #fff,
-		0 0 10px #fff,
-		0 0 20px #fff,
-		0 0 40px #FB4264,
-		0 0 80px #FB4264,
-		0 0 90px #FB4264,
-		0 0 100px #FB4264,
-		0 0 150px #FB4264;
+		text-shadow: 0 0 3vw #FF00E6;	
 	}
 	.x-mark {
 		position: relative;
@@ -109,25 +96,31 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-		window.onload = function() {
+		function addLoadEvent(func) {
+			var existingOnload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function() {
+					if (existingOnload) {
+						existingOnload();
+					}
+					func();
+				}
+			}
+		}
+		addLoadEvent(function() {
 			Particles.init({
 				selector: '.background',
 				connectParticles: true,
 				color: '#f3f3f3',
 				maxParticles: 50,
 				speed: 0.2
-			});
-		};
-		var item = document.getElementsByClassName("square");
-		var counter = 0;
-		var player1 = 'Steve';
-		var player2 = 'null';
-		var player1Selection = [];
-		var player2Selection = [];
-		var winningCombo = [];
-		var currentPlayerResult = player1Selection;
+			})});
+		addLoadEvent(loadWinningCombo);
+		addLoadEvent(bindEvent)
 
-		(function loadWinningCombo() {
+		function loadWinningCombo() {
 			winningCombo.push([1, 2, 3]);
 			winningCombo.push([4, 5, 6]);
 			winningCombo.push([7, 8, 9]);
@@ -136,8 +129,16 @@
 			winningCombo.push([3, 6, 9]);
 			winningCombo.push([1, 5, 9]);
 			winningCombo.push([3, 5, 7]);
-			bindEvent();
-		})();
+		};
+		var item = document.getElementsByClassName("square");
+		var counter = 0;
+		var player1 = {name: 'Player 1', player1Selection: []};
+		var player2 = {name: 'Player 2', player2Selection: []};
+		var player1Selection = [];
+		var player2Selection = [];
+		var winningCombo = [];
+		var currentPlayerResult = player1;
+
 
 		function bindEvent() {
 			for (var i=0; i<item.length; i++) {
@@ -155,32 +156,38 @@
 
 				counter += 1;
 
-				if(currentPlayerResult == player1Selection) {
-					player1Selection.push(parseInt(element.getAttribute('data-value')));
-					player1Selection.sort(function(a, b) { return a - b });
+				if(currentPlayerResult == player1) {
+					player1.player1Selection.push(parseInt(element.getAttribute('data-value')));
+					player1.player1Selection.sort(function(a, b) { return a - b });
 					element.classList.add('x-mark');
 				} else {
-					player2Selection.push(parseInt(element.getAttribute('data-value')));
-					player2Selection.sort(function(a, b) {return a - b});
+					player2.player2Selection.push(parseInt(element.getAttribute('data-value')));
+					player2.player2Selection.sort(function(a, b) {return a - b});
 					element.classList.add('o-mark');
 				}
 				let weHaveAWinner = checkBoard();
 
 				if(weHaveAWinner) {
 					console.log(currentPlayerResult.name + ' is the winner');
+					if(currentPlayerResult == player1) {
+						[].map.call(document.querySelectorAll('.game-on-state'), function(el) {
+							el.classList.toggle('player1-win-state');
+						});
+					} else {
+						[].map.call(document.querySelectorAll('.game-on-state'), function(el) {
+							el.classList.toggle('player2-win-state');
+						});
+					}					
 					endGame();
 				}
 				checkBoard();
-				if(currentPlayerResult == player1Selection) {
-					currentPlayerResult = player2Selection;
+				if(currentPlayerResult == player1) {
+					currentPlayerResult = player2;
 				} else {
-					currentPlayerResult = player1Selection;
+					currentPlayerResult = player1;
 				}
 			}
 			if (counter == 9) {
-			  [].map.call(document.querySelectorAll('.game-on-state'), function(el) {
-			    el.classList.toggle('game-over-state');
-			  });
 				console.log('Game over')
 			}
 		}
@@ -189,10 +196,10 @@
 			let win = false;
 			let selectedSquare = new Array();
 
-			if (currentPlayerResult == player1Selection) {
-				selectedSquare = player1Selection;
+			if (currentPlayerResult == player1) {
+				selectedSquare = player1.player1Selection;
 			} else {
-				selectedSquare = player2Selection;
+				selectedSquare = player2.player2Selection;
 			}
 			
 			if (selectedSquare.length >= 3) {
