@@ -5,17 +5,17 @@
 	<style type="text/css">
 	html,
 	body {
-	  margin: 0;
-	  padding: 0;
+		margin: 0;
+		padding: 0;
 	}
 
 	.background {
-	  position: absolute;
-	  display: block;
-	  top: 0;
-	  left: 0;
-	  z-index: -1;
-	  background-color: #150d0d;
+		position: absolute;
+		display: block;
+		top: 0;
+		left: 0;
+		z-index: -1;
+		background-color: #150d0d;
 	}	
 	.main-container {
 		display: flex; 
@@ -28,49 +28,64 @@
 		background-color: #150d0d;
 	}
 	.square {
-	    border: 4px solid #FB4264;
-	    box-shadow: inset 0 0 10px 2px #fff,0 0 10px 2px #fff;
-	    border-radius: 3em;
-    height: 7em;
-    width: 7em;
-    margin: 1em;
-      color: #fff;
-  text-shadow:
-    0 0 5px #fff,
-    0 0 10px #fff,
-    0 0 20px #fff,
-    0 0 40px #FB4264,
-    0 0 80px #FB4264,
-    0 0 90px #FB4264,
-    0 0 100px #FB4264,
-    0 0 150px #FB4264;
+		box-shadow: inset 0 0 10px 2px #fff,0 0 10px 2px #fff;
+		border-radius: 3em;
+		height: 7em;
+		width: 7em;
+		margin: 1em;
+		color: #fff;
+
+	}
+	.game-on-state {
+		border: 4px solid #0ff;
+		text-shadow:
+		0 0 5px #fff,
+		0 0 10px #fff,
+		0 0 20px #fff,
+		0 0 40px #0ff,
+		0 0 80px #0ff,
+		0 0 90px #0ff,
+		0 0 100px #0ff,
+		0 0 150px #0ff;
+	}
+	.game-over-state {
+		border: 4px solid #FB4264;
+		text-shadow:
+		0 0 5px #fff,
+		0 0 10px #fff,
+		0 0 20px #fff,
+		0 0 40px #FB4264,
+		0 0 80px #FB4264,
+		0 0 90px #FB4264,
+		0 0 100px #FB4264,
+		0 0 150px #FB4264;
 	}
 	.x-mark {
-	    position: relative;
+		position: relative;
 	}
 	.x-mark:after {
-	    position: absolute;
-	    top: 0;
-	    bottom: 0;
-	    left: 0;
-	    right: 0;
-	    content: "\2716";
-	    font-size: 5em; 
-	    color: #FFF;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		content: "\2716";
+		font-size: 5em; 
+		color: #FFF;
 	}
 	.o-mark {
-	    position: relative;
+		position: relative;
 	}
 	.o-mark:after {
-	    position: absolute;
-	    top: 0;
-	    bottom: 0;
-	    left: 0;
-	    right: 0;
-	    content: "\25CB";
-	    font-size: 10em; 
-	    color: #FFF;
-	    line-height: 100px;	
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		content: "\25CB";
+		font-size: 9em; 
+		color: #FFF;
+		line-height: 100px;	
 	}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.1.0/particles.min.js"></script>
@@ -78,37 +93,39 @@
 <body>
 	<div class="main-container">
 		<div class="row-container row-1">
-			<div class="square square-1" data-value="1"></div>
-			<div class="square square-2" data-value="2"></div>
-			<div class="square square-3" data-value="3"></div>
+			<div class="square square-1 game-on-state" data-value="1"></div>
+			<div class="square square-2 game-on-state" data-value="2"></div>
+			<div class="square square-3 game-on-state" data-value="3"></div>
 		</div>
 		<div class="row-container row-2">
-			<div class="square square-4" data-value="4"></div>
-			<div class="square square-5" data-value="5"></div>
-			<div class="square square-6" data-value="6"></div>
+			<div class="square square-4 game-on-state" data-value="4"></div>
+			<div class="square square-5 game-on-state" data-value="5"></div>
+			<div class="square square-6 game-on-state" data-value="6"></div>
 		</div>
 		<div class="row-container row-3">
-			<div class="square square-7" data-value="7"></div>
-			<div class="square square-8" data-value="8"></div>
-			<div class="square square-9" data-value="9"></div>
+			<div class="square square-7 game-on-state" data-value="7"></div>
+			<div class="square square-8 game-on-state" data-value="8"></div>
+			<div class="square square-9 game-on-state" data-value="9"></div>
 		</div>
 	</div>
 	<script type="text/javascript">
 		window.onload = function() {
-		  Particles.init({
-		    selector: '.background',
-		    connectParticles: true,
-		    color: '#f3f3f3',
-		    maxParticles: 50,
-		    speed: 1
-		  });
+			Particles.init({
+				selector: '.background',
+				connectParticles: true,
+				color: '#f3f3f3',
+				maxParticles: 50,
+				speed: 0.2
+			});
 		};
 		var item = document.getElementsByClassName("square");
 		var counter = 0;
-		var player1 = [];
-		var player2 = [];
+		var player1 = 'Steve';
+		var player2 = 'null';
+		var player1Selection = [];
+		var player2Selection = [];
 		var winningCombo = [];
-		var currentPlayerResult = player1;
+		var currentPlayerResult = player1Selection;
 
 		(function loadWinningCombo() {
 			winningCombo.push([1, 2, 3]);
@@ -138,13 +155,13 @@
 
 				counter += 1;
 
-				if(currentPlayerResult == player1) {
-					player1.push(parseInt(element.getAttribute('data-value')));
-					player1.sort(function(a, b) { return a - b });
+				if(currentPlayerResult == player1Selection) {
+					player1Selection.push(parseInt(element.getAttribute('data-value')));
+					player1Selection.sort(function(a, b) { return a - b });
 					element.classList.add('x-mark');
 				} else {
-					player2.push(parseInt(element.getAttribute('data-value')));
-					player2.sort(function(a, b) {return a - b});
+					player2Selection.push(parseInt(element.getAttribute('data-value')));
+					player2Selection.sort(function(a, b) {return a - b});
 					element.classList.add('o-mark');
 				}
 				let weHaveAWinner = checkBoard();
@@ -154,13 +171,16 @@
 					endGame();
 				}
 				checkBoard();
-				if(currentPlayerResult == player1) {
-					currentPlayerResult = player2;
+				if(currentPlayerResult == player1Selection) {
+					currentPlayerResult = player2Selection;
 				} else {
-					currentPlayerResult = player1;
+					currentPlayerResult = player1Selection;
 				}
 			}
 			if (counter == 9) {
+			  [].map.call(document.querySelectorAll('.game-on-state'), function(el) {
+			    el.classList.toggle('game-over-state');
+			  });
 				console.log('Game over')
 			}
 		}
@@ -169,10 +189,10 @@
 			let win = false;
 			let selectedSquare = new Array();
 
-			if (currentPlayerResult == player1) {
-				selectedSquare = player1;
+			if (currentPlayerResult == player1Selection) {
+				selectedSquare = player1Selection;
 			} else {
-				selectedSquare = player2;
+				selectedSquare = player2Selection;
 			}
 			
 			if (selectedSquare.length >= 3) {
@@ -214,8 +234,8 @@
 			}
 		}
 
-</script>
-<canvas class="background"></canvas>
-<script src="path/to/particles.min.js"></script>
+	</script>
+	<canvas class="background"></canvas>
+	<script src="path/to/particles.min.js"></script>
 </body>
 </html>
